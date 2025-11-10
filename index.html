@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>나의피는커피로되어있어 — 아이스아메리카노 취향 검사</title>
   <style>
     :root{
@@ -11,49 +11,79 @@
       --muted:#7a6a5a;
       --coffee-dark:#6b3e26;
       --coffee-mid:#a67856;
-      --coffee-light:#d6b89a;
       --accent:#6b3e26;
+
+      --tap:48px;
+      --radius:14px;
+      --shadow:0 6px 20px rgba(107,62,38,0.06);
+      --shadow-strong:0 14px 40px rgba(107,62,38,0.28);
     }
     *{box-sizing:border-box}
-    body{font-family:'Noto Sans KR',system-ui;background:var(--bg);margin:0;padding:24px;color:var(--coffee-dark)}
-    .wrap{max-width:920px;margin:18px auto;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.8));border-radius:14px}
-    header{display:flex;gap:14px;align-items:center}
+    body{
+      font-family:'Noto Sans KR',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg);
+      margin:0;
+      padding:max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      color:var(--coffee-dark);
+      line-height:1.45;
+    }
+    .wrap{
+      max-width:880px;
+      margin:0 auto;
+      padding:24px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.85));
+      border-radius:var(--radius);
+    }
+    header{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+    header img{width:64px;height:64px;border-radius:12px;object-fit:cover;box-shadow:0 4px 14px rgba(0,0,0,0.06)}
     h1{margin:0;font-size:22px}
-    p.lead{margin:8px 0 18px;color:var(--muted);font-size:14px}
-    .card{background:var(--card);padding:18px;border-radius:12px;margin-bottom:18px;box-shadow:0 6px 20px rgba(107,62,38,0.06)}
+    p.lead{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+    .card{background:var(--card);padding:18px;border-radius:12px;margin-top:16px;box-shadow:var(--shadow)}
     .question{margin-bottom:22px}
     .q-title{font-weight:800;font-size:15px;margin-bottom:10px}
-    .likert-row{display:flex;align-items:center;gap:18px}
-    .likert-label{width:88px;text-align:center;color:var(--coffee-dark);font-weight:700}
-    .likert{display:flex;gap:22px;flex:1;justify-content:center}
-    .likert label{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+
+    .likert-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}
+    .likert-label{width:80px;text-align:center;color:var(--coffee-dark);font-weight:700;font-size:13px}
+    .likert{display:flex;gap:18px;justify-content:space-between;flex:1}
+    .likert label{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
     .likert input{display:none}
-    .dot{width:56px;height:56px;border-radius:50%;border:3px solid rgba(107,62,38,0.25);display:flex;align-items:center;justify-content:center;transition:all .18s}
+    .dot{width:var(--tap);height:var(--tap);border-radius:50%;border:3px solid rgba(107,62,38,0.25);display:flex;align-items:center;justify-content:center;transition:all .18s}
     .dot small{font-size:12px;color:var(--muted)}
     .likert input:checked+.dot{background:var(--coffee-mid);border-color:var(--coffee-mid);box-shadow:0 6px 18px rgba(0,0,0,0.08)}
     .likert input:checked+.dot small{color:white}
-    .scale-note{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;padding:6px 8px}
-    button{background:var(--coffee-dark);border:none;color:white;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:800}
-    button.ghost{background:transparent;border:1px solid rgba(107,62,38,0.12);color:var(--coffee-dark)}
+
+    button{background:var(--coffee-dark);border:none;color:white;padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:800;font-size:14px;box-shadow:0 6px 14px rgba(107,62,38,0.18)}
+    button.ghost{background:transparent;border:1px solid rgba(107,62,38,0.16);color:var(--coffee-dark);box-shadow:none}
+
+    .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+    .status{margin-top:6px;font-size:13px;color:var(--muted)}
     .result-wrap{display:none;justify-content:center;margin-top:18px}
-    .result-card{width:360px;border-radius:14px;padding:18px;background:linear-gradient(180deg,var(--coffee-mid),var(--coffee-dark));color:white;box-shadow:0 14px 40px rgba(107,62,38,0.28)}
-    .result-title{font-weight:900;font-size:18px;margin:0}
-    .chip{background:rgba(255,255,255,0.12);padding:6px 8px;border-radius:999px;font-weight:700}
+    .result-card{width:360px;border-radius:14px;padding:18px;background:linear-gradient(180deg,var(--coffee-mid),var(--coffee-dark));color:white;box-shadow:var(--shadow-strong)}
+    .result-title{font-weight:900;font-size:18px;margin:0 0 6px}
+    .chip{background:rgba(255,255,255,0.12);padding:6px 8px;border-radius:999px;font-weight:700;font-size:12px}
+    @media(max-width:560px){
+      header{align-items:flex-start}
+      .likert-row{grid-template-columns:1fr}
+      .likert-label{width:auto;text-align:left;opacity:.8}
+      .actions{position:sticky;bottom:8px;background:transparent;padding-top:6px}
+      button{flex:1}
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <img src="https://github.com/objectiveassess/coffeetype/blob/553e6c19e34640e679545465dc1e9a1c4e36c2ac/ChatGPT%20Image%202025%E1%84%82%E1%85%A7%E1%86%AB%2011%E1%84%8B%E1%85%AF%E1%86%AF%2010%E1%84%8B%E1%85%B5%E1%86%AF%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2001_06_33.png"/>
+      <img src="./logo.png" alt="커피 로고">
       <div>
         <h1>나의피는커피로되어있어</h1>
-        <p class="lead">3가지 기준으로 선택하면 입력한 커피 데이터 중 가장 어울리는 커피를 추천합니다.</p>
+        <p class="lead">3가지 기준으로 선택하면, GitHub에 저장한 커피 데이터 중 가장 어울리는 커피를 추천합니다.</p>
       </div>
     </header>
 
     <div class="card">
       <div class="question">
-        <div class="q-title">1) 산미 — '시다' 정도</div>
+        <div class="q-title">1) 산미 — ‘시다’ 정도</div>
         <div class="likert-row">
           <div class="likert-label">그렇다</div>
           <div class="likert">
@@ -67,7 +97,7 @@
       </div>
 
       <div class="question">
-        <div class="q-title">2) 고소함 — '고소하다' 정도</div>
+        <div class="q-title">2) 고소함 — ‘고소하다’ 정도</div>
         <div class="likert-row">
           <div class="likert-label">그렇다</div>
           <div class="likert">
@@ -81,7 +111,7 @@
       </div>
 
       <div class="question">
-        <div class="q-title">3) 쓴맛 — '쓰다' 정도</div>
+        <div class="q-title">3) 쓴맛 — ‘쓰다’ 정도</div>
         <div class="likert-row">
           <div class="likert-label">그렇다</div>
           <div class="likert">
@@ -94,46 +124,68 @@
         </div>
       </div>
 
-      <div style="margin-top:6px;font-size:13px;color:var(--muted)">JSON 형태로 커피 데이터를 입력하세요.</div>
-      <textarea id="dataInput" style="width:100%;height:120px;margin-top:8px;padding:12px;border-radius:12px;border:1px solid #ddd">[
-  {"name":"아틀리에 빈","acidity":2,"nutty":2,"bitter":3},
-  {"name":"KFC","acidity":1,"nutty":3,"bitter":4},
-  {"name":"피크닉 스테이션","acidity":2,"nutty":4,"bitter":1}
-]</textarea>
+      <div class="status" id="status">데이터 불러오는 중…</div>
 
-      <div style="text-align:right;margin-top:12px">
-        <button onclick="calcResult()">결과 보기</button>
+      <div class="actions">
+        <button class="ghost" type="button" id="reloadBtn">데이터 새로고침</button>
+        <button type="button" onclick="calcResult()">결과 보기</button>
       </div>
     </div>
 
     <div class="result-wrap" id="resultWrap">
-      <div class="result-card" id="resultCard">
+      <div class="result-card">
         <h2 class="result-title" id="resName">결과 이름</h2>
         <p id="resDesc">당신에게 가장 어울리는 커피입니다.</p>
+        <div class="chip" id="metaNote"></div>
       </div>
     </div>
   </div>
 
   <script>
-    function calcResult(){
-      const s = Number(document.querySelector('input[name="sour"]:checked')?.value);
-      const n = Number(document.querySelector('input[name="nutty"]:checked')?.value);
-      const b = Number(document.querySelector('input[name="bitter"]:checked')?.value);
-      if(!s||!n||!b){ alert('모든 문항을 선택하세요.'); return; }
-      let list;
-      try{ list = JSON.parse(document.getElementById('dataInput').value); }
-      catch(e){ alert('JSON 형식 오류'); return; }
+    // ⚙️ 깃허브 JSON 데이터 주소 입력
+    const GITHUB_JSON_URL = 'https://raw.githubusercontent.com/your-id/coffee-test/main/coffee-data.json';
 
-      let best=null, bestScore=9999;
-      list.forEach(coffee=>{
-        const d = Math.abs(s-coffee.acidity)+Math.abs(n-coffee.nutty)+Math.abs(b-coffee.bitter);
-        if(d<bestScore){bestScore=d; best=coffee;}
-      });
+    let coffeeList = [];
+    let lastFetched = null;
+    const statusEl = document.getElementById('status');
 
-      document.getElementById('resName').textContent = best.name;
-      document.getElementById('resDesc').textContent = `산미 ${best.acidity}, 고소함 ${best.nutty}, 쓴맛 ${best.bitter} 점수 조합이 당신과 가장 유사합니다.`;
-      document.getElementById('resultWrap').style.display='flex';
+    async function fetchCoffeeData() {
+      statusEl.textContent = '데이터 불러오는 중…';
+      try {
+        const res = await fetch(GITHUB_JSON_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('네트워크 오류');
+        const list = await res.json();
+        coffeeList = list;
+        lastFetched = new Date();
+        statusEl.textContent = `불러온 데이터 ${coffeeList.length}개`;
+      } catch (err) {
+        statusEl.textContent = '⚠️ 데이터 불러오기 실패: ' + err.message;
+      }
     }
+
+    function getScore(name){
+      return Number(document.querySelector(`input[name="${name}"]:checked`)?.value);
+    }
+
+    function calcResult(){
+      const s = getScore('sour'), n = getScore('nutty'), b = getScore('bitter');
+      if(!s||!n||!b){alert('모든 문항을 선택하세요.');return;}
+      if(!coffeeList.length){alert('데이터가 없습니다.');return;}
+
+      let best=null,bestScore=9999;
+      coffeeList.forEach(c=>{
+        const d = Math.abs(s-c.acidity)+Math.abs(n-c.nutty)+Math.abs(b-c.bitter);
+        if(d<bestScore){bestScore=d;best=c;}
+      });
+      document.getElementById('resName').textContent=best.name;
+      document.getElementById('resDesc').textContent=`산미 ${best.acidity}, 고소함 ${best.nutty}, 쓴맛 ${best.bitter}`;
+      document.getElementById('metaNote').textContent=`데이터 기준: ${lastFetched.toLocaleString()}`;
+      document.getElementById('resultWrap').style.display='flex';
+      document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});
+    }
+
+    document.getElementById('reloadBtn').addEventListener('click', fetchCoffeeData);
+    fetchCoffeeData();
   </script>
 </body>
 </html>
