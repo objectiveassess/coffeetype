@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>경북대 아이스 아메리카노 지도 — 커피형 인간입니다.</title>
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+
+  <style>
+    :root{
+      --bg:#f5efe9;
+      --card:#fff;
+      --muted:#7a6a5a;
+      --coffee-dark:#6b3e26;
+      --coffee-mid:#a67856;
+      --radius:14px;
+      --shadow:0 6px 20px rgba(107,62,38,0.06);
+
+      /* 지도/마커 색 */
+      --type-sour:#ff9d29;
+      --type-nutty:#c47a3b;
+      --type-bitter:#6b3e26;
+      --type-blend:#b9532a;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      font-family:"Noto Sans KR",system-ui,-apple-system;
+      background:var(--bg);
+      color:var(--coffee-dark);
+      padding:max(16px, env(safe-area-inset-top))
+              max(16px, env(safe-area-inset-right))
+              max(24px, env(safe-area-inset-bottom))
+              max(16px, env(safe-area-inset-left));
+      line-height:1.45;
+    }
+
+    .wrap{
+      max-width:880px;
+      margin:0 auto;
+      padding:24px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.85));
+      border-radius:var(--radius);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:10px;
+    }
+    header img{
+      width:64px;
+      height:64px;
+      border-radius:12px;
+      object-fit:cover;
+      box-shadow:0 4px 14px rgba(0,0,0,0.06);
+    }
+    h1{font-size:22px}
+    p.lead{margin-top:4px;color:var(--muted);font-size:14px}
+
+    .card{
+      background:var(--card);
+      padding:18px 18px 16px;
+      border-radius:12px;
+      margin-top:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .card-title{
+      font-weight:800;
+      font-size:18px;
+      margin-bottom:4px;
+      color:var(--coffee-dark);
+    }
+    .card-sub{
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    /* 지도 영역 */
+    #map{
+      width:100%;
+      height:0;
+      padding-bottom:70%;       /* 비율 고정 (가로세로) */
+      border-radius:12px;
+      overflow:hidden;
+    }
+
+    /* Leaflet 기본 보정 (둥근 모서리 안 벗어나게) */
+    .leaflet-container{
+      width:100%;
+      height:100%;
+      font-family:inherit;
+    }
+
+    .legend{
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 16px;
+    }
+    .legend-item{
+      display:flex;
+      align-items:center;
+      gap:4px;
+    }
+    .legend-dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#000;
+    }
+    .legend-dot.sour{background:var(--type-sour);}
+    .legend-dot.nutty{background:var(--type-nutty);}
+    .legend-dot.bitter{background:var(--type-bitter);}
+    .legend-dot.blend{background:var(--type-blend);}
+
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:14px;
+    }
+    button{
+      background:var(--coffee-dark);
+      border:none;
+      color:white;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:700;
+      font-size:13px;
+      box-shadow:0 6px 14px rgba(107,62,38,0.18);
+    }
+
+    @media (max-width:560px){
+      header{align-items:flex-start}
+      button{width:auto}
+      .card{padding:16px 14px 14px;}
+      #map{padding-bottom:80%;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- 헤더 -->
+    <header>
+      <img src="./logo.PNG" alt="커피 로고">
+      <div>
+        <h1>커피형 인간입니다.</h1>
+        <p class="lead">본인의 혈액 속 커피 유전자를 분석해드립니다.</p>
+      </div>
+    </header>
+
+    <!-- 지도 카드 -->
+    <div class="card">
+      <div class="card-title">경북대 아이스 아메리카노 지도 (개발중)</div>
+      <p class="card-sub">
+        경북대 인근에서 아이스를 판매하는 카페들을 하나씩 모으는 중입니다.<br>
+        점 색깔은 카페의 대표 아아 맛 타입을 의미해요.
+      </p>
+
+      <div id="map"></div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot sour"></span><span>상큼형</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot nutty"></span><span>고소형</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot bitter"></span><span>쌉사름형</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot blend"></span><span>복합 상큼고소형 / 블렌드형</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button onclick="location.href='index.html'">← 메뉴로 돌아가기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin="">
+  </script>
+
+  <script>
+    const CAFE_JSON_URL = './knu-cafes.json?v=1';
+    let knuCafes = [];
+
+    // 타입별 색 & 라벨
+    const TYPE_STYLE = {
+      sour:   { color:'var(--type-sour)',  label:'상큼형' },
+      nutty:  { color:'var(--type-nutty)', label:'고소형' },
+      bitter: { color:'var(--type-bitter)',label:'쌉사름형' },
+      sourgoso:{color:'var(--type-blend)', label:'복합 상큼고소형' },
+      blend:  { color:'var(--type-blend)', label:'복합 블렌드형' }
+    };
+
+    async function loadCafeData(){
+      if(knuCafes.length) return knuCafes;
+      const res = await fetch(CAFE_JSON_URL,{cache:'no-store'});
+      if(!res.ok) throw new Error('json load error');
+      knuCafes = await res.json();
+      return knuCafes;
+    }
+
+    function initMap(cafes){
+      // 경북대 중심 근처 (필요하면 좌표 살짝 조정 가능)
+      const center = [35.8883, 128.6108];
+
+      const map = L.map('map',{
+        center,
+        zoom:16,
+        zoomControl:true
+      });
+
+      // 더 깔끔한 Carto 밝은 지도 타일
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ' +
+          'contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      }).addTo(map);
+
+      // 카페 마커 표시
+      cafes.forEach(cafe=>{
+        const lat = cafe.lat || cafe.latitude;
+        const lng = cafe.lng || cafe.longitude;
+        if(typeof lat !== 'number' || typeof lng !== 'number') return;
+
+        const typeKey = cafe.type || 'blend';
+        const style = TYPE_STYLE[typeKey] || TYPE_STYLE.blend;
+
+        const marker = L.circleMarker([lat,lng],{
+          radius:7,
+          color:style.color,
+          fillColor:style.color,
+          fillOpacity:0.9,
+          weight:1.5
+        }).addTo(map);
+
+        const priceText = cafe.price ? `${cafe.price.toLocaleString()}원` : '정보 수집 중';
+        const typeText  = style.label;
+        const noteText  = cafe.note || cafe.desc || '';
+
+        marker.bindPopup(`
+          <div style="font-size:13px; line-height:1.5;">
+            <strong>${cafe.name || '이름 미등록 카페'}</strong><br/>
+            대표 타입: ${typeText}<br/>
+            아아 가격: ${priceText}<br/>
+            ${noteText ? `<div style="margin-top:4px;color:#7a6a5a;">${noteText}</div>` : ''}
+          </div>
+        `);
+      });
+    }
+
+    // 페이지 로드 시 실행
+    (async function(){
+      try{
+        const cafes = await loadCafeData();
+        initMap(cafes);
+      }catch(e){
+        console.error(e);
+        alert('카페 지도 데이터를 불러오지 못했습니다.');
+      }
+    })();
+  </script>
+</body>
+</html>
