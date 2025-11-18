@@ -936,10 +936,14 @@
 
       knuMap = L.map('knuMap').setView([35.8880, 128.6100], 15);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(knuMap);
-
+      L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+      {
+      attribution:
+      '&copy; OpenStreetMap contributors &copy; CARTO',
+      maxZoom: 19
+      }
+      ).addTo(knuMap);
       knuCafes.forEach(cafe=>{
         const color = tasteColor(cafe.taste);
         const marker = L.circleMarker([cafe.lat, cafe.lng], {
