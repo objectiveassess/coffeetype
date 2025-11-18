@@ -14,19 +14,20 @@
 
   <style>
     :root{
-      --bg:#f5efe9;
-      --card:#fff;
-      --muted:#7a6a5a;
-      --coffee-dark:#6b3e26;
-      --coffee-mid:#a67856;
+      /* 모던 & 미니멀 커피 팔레트 */
+      --bg:#f4eee6;
+      --card:#ffffff;
+      --muted:#8a7660;
+      --coffee-dark:#7a4f32;   /* 메인 브라운 */
+      --coffee-mid:#e3c9a4;    /* 라이트 브라운 */
       --tap:44px;
       --radius:14px;
-      --shadow:0 6px 20px rgba(107,62,38,0.06);
+      --shadow:0 6px 20px rgba(0,0,0,0.05);
 
-      --ink:#4a2c1a;
+      --ink:#2e1e0f;
       --card-bg:#fffdf7;
       --line:rgba(0,0,0,0.12);
-      --accent:#a67856;
+      --accent:#c59663;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -46,7 +47,7 @@
       max-width:880px;
       margin:0 auto;
       padding:24px;
-      background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.85));
+      background:linear-gradient(180deg,rgba(255,255,255,0.65),rgba(255,255,255,0.9));
       border-radius:var(--radius);
     }
 
@@ -72,11 +73,16 @@
       border:none;
       color:white;
       padding:12px 16px;
-      border-radius:12px;
+      border-radius:999px;
       cursor:pointer;
       font-weight:800;
       font-size:14px;
-      box-shadow:0 6px 14px rgba(107,62,38,0.18);
+      box-shadow:0 6px 14px rgba(0,0,0,0.12);
+      transition:transform .08s ease, box-shadow .08s ease, background-color .12s ease, color .12s ease;
+    }
+    button:active{
+      transform:translateY(1px);
+      box-shadow:0 3px 8px rgba(0,0,0,0.18);
     }
 
     /* ===== 화면 전환용 ===== */
@@ -87,7 +93,7 @@
     .menu-card{
       margin-top:18px;
       background:var(--card);
-      border-radius:12px;
+      border-radius:16px;
       padding:18px 16px 20px;
       box-shadow:var(--shadow);
       text-align:center;
@@ -110,14 +116,17 @@
     }
     .menu-btn-main{
       background:var(--coffee-dark);
+      color:#fff;
     }
     .menu-btn-sub{
-      background:#8a5b3a;
+      background:var(--coffee-mid);
+      color:var(--ink);
+      box-shadow:0 8px 16px rgba(0,0,0,0.06);
     }
     .menu-btn-ghost{
-      background:transparent;
+      background:var(--card-bg);
       color:var(--coffee-dark);
-      border:1px solid rgba(0,0,0,0.12);
+      border:1px solid var(--line);
       box-shadow:none;
     }
 
@@ -161,7 +170,7 @@
       width:var(--tap);
       height:var(--tap);
       border-radius:50%;
-      border:3px solid rgba(107,62,38,0.25);
+      border:3px solid rgba(122,79,50,0.25);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -227,7 +236,6 @@
     .report-head-text{
       font-size:10px;
       letter-spacing:.02em;
-      text-transform:none;
       color:rgba(0,0,0,0.55);
     }
     .report-head-title{
@@ -387,16 +395,17 @@
       border-radius:10px;
       padding:9px 8px;
       white-space:nowrap;
+      box-shadow:0 4px 10px rgba(0,0,0,0.08);
     }
-    #toggleTop3Btn{background:#8a5b3a;}
-    #saveImageBtn{background:#6b3e26;}
-    #retryBtn{background:#a67856;}
+    #toggleTop3Btn{background:var(--coffee-mid);color:var(--ink);}
+    #saveImageBtn{background:var(--coffee-dark);}
+    #retryBtn{background:#d9b48a;}
 
     /* 지도 화면 */
     .map-card{
       margin-top:18px;
       background:var(--card);
-      border-radius:12px;
+      border-radius:16px;
       padding:14px 14px 18px;
       box-shadow:var(--shadow);
     }
@@ -412,9 +421,9 @@
     }
     #knuMap{
       width:100%;
-      height:420px;
       border-radius:12px;
       overflow:hidden;
+      aspect-ratio:1/1; /* 지원되는 브라우저에서 우선 정사각형 유지 */
     }
     .map-legend{
       margin-top:8px;
@@ -686,6 +695,18 @@
   </div>
 
   <script>
+    /* ===== 지도 컨테이너를 항상 정사각형으로 ===== */
+    function resizeKnuMapSquare(){
+      const el = document.getElementById('knuMap');
+      if(!el) return;
+      const width = el.offsetWidth;
+      el.style.height = width + 'px';
+      if(window.knuMap){
+        window.knuMap.invalidateSize();
+      }
+    }
+    window.addEventListener('resize', resizeKnuMapSquare);
+
     /* ===== 화면 전환 ===== */
     function showScreen(name){
       document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -697,8 +718,11 @@
         window.scrollTo({top:0,behavior:'smooth'});
       }else if(name === 'map'){
         document.getElementById('mapScreen').classList.add('active');
-        initKnuMap();
-        setTimeout(()=>{ if(knuMap) knuMap.invalidateSize(); }, 200);
+        // 정사각형으로 맞춘 뒤 지도 초기화
+        setTimeout(()=>{
+          resizeKnuMapSquare();
+          initKnuMap();
+        },0);
       }
     }
 
@@ -892,7 +916,7 @@
       html2canvas(target, {
         scale: 3,
         useCORS: true,
-        backgroundColor: '#f5efe9',
+        backgroundColor: '#f4eee6',
         scrollY: -window.scrollY
       }).then(canvas=>{
         window.scrollTo(0, prevScrollY);
@@ -930,9 +954,16 @@
     }
 
     async function initKnuMap(){
-      if(mapInitialized) return;
+      if(mapInitialized){
+        if(knuMap){
+          resizeKnuMapSquare();
+          knuMap.invalidateSize();
+        }
+        return;
+      }
 
       await loadCafeData();
+      resizeKnuMapSquare();
 
       knuMap = L.map('knuMap').setView([35.8880, 128.6100], 15);
 
@@ -942,6 +973,7 @@
                     maxZoom: 19
                   }
       ).addTo(knuMap);
+
       knuCafes.forEach(cafe=>{
         const color = tasteColor(cafe.taste);
         const marker = L.circleMarker([cafe.lat, cafe.lng], {
@@ -960,6 +992,7 @@
       });
 
       mapInitialized = true;
+      setTimeout(resizeKnuMapSquare, 150);
     }
 
     /* 다시 검사하기 */
