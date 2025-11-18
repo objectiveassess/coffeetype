@@ -215,11 +215,26 @@
     };
 
     async function loadCafeData(){
-      if(knuCafes.length) return knuCafes;
-      const res = await fetch(CAFE_JSON_URL,{cache:'no-store'});
-      if(!res.ok) throw new Error('json load error');
-      knuCafes = await res.json();
-      return knuCafes;
+      if(knuCafes.length) return;
+      try{
+        const res = await fetch(CAFE_JSON_URL, { cache: 'no-store' });
+
+        // 1) HTTP 상태 확인 (404, 500 등)
+        if (!res.ok) {
+          throw new Error('HTTP 상태 코드: ' + res.status);
+        }
+
+        // 2) 텍스트로 먼저 받아서
+        const raw = await res.text();
+        console.log('knu-cafes.json 원본 텍스트:', raw);
+
+        // 3) 직접 JSON.parse 실행 (여기서 문법 오류면 에러 메시지 확실하게 보임)
+        knuCafes = JSON.parse(raw);
+
+      } catch (e) {
+        console.error('카페 JSON 로딩/파싱 에러:', e);
+        alert('카페 지도 데이터를 불러오지 못했습니다.\n(개발자 도구 콘솔 오류 메시지를 확인해 주세요)');
+      }
     }
 
     function initMap(cafes){
