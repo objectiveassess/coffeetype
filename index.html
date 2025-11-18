@@ -421,9 +421,9 @@
     }
     #knuMap{
       width:100%;
+      aspect-ratio: 1 / 1;
+      height:auto;
       border-radius:12px;
-      overflow:hidden;
-      aspect-ratio:1/1; /* 지원되는 브라우저에서 우선 정사각형 유지 */
     }
     .map-legend{
       margin-top:8px;
@@ -472,20 +472,20 @@
     <!-- ===== 1. 메인 메뉴 화면 ===== -->
     <section id="menuScreen" class="screen active">
       <div class="menu-card">
-        <div class="menu-title">오늘의 아이스 아메리카노, 골라볼까요?</div>
+        <div class="menu-title">커피형 인간입니다.</div>
         <p class="menu-sub">
-          취향 테스트로 나만의 커피형을 찾고,<br>
-          경북대 인근 아아 지도로 찐 맛집을 함께 모읍니다.
+          커피형 인간입니다. 테스트로 나만의 커피형을 찾고,<br>
+          함께 경북대 아아지도를 만들어갑니다.
         </p>
         <div class="menu-buttons">
           <button class="menu-btn-main" onclick="showScreen('test')">
-            ☕ 나에게 맞는 아이스 아메리카노 테스트하기
+            내 아아 테스트
           </button>
           <button class="menu-btn-sub" onclick="window.location.href='https://naver.me/FfBQjw53';">
-            🧊 함께 경북대 아아 지도 만들기
+            경북대 아아지도 만들기
           </button>
           <button class="menu-btn-ghost" onclick="showScreen('map')">
-            🗺 경북대 아아 지도(개발중) 미리보기
+            경북대 아아지도 미리보기
           </button>
         </div>
       </div>
