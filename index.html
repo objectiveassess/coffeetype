@@ -14,20 +14,20 @@
 
   <style>
     :root{
-      /* 모던 & 미니멀 커피 팔레트 */
-      --bg:#f4eee6;
-      --card:#ffffff;
-      --muted:#8a7660;
-      --coffee-dark:#7a4f32;   /* 메인 브라운 */
-      --coffee-mid:#e3c9a4;    /* 라이트 브라운 */
+      /* 캡처 톤 참고해서 재조합한 팔레트 */
+      --bg:#f4eee6;          /* 전체 배경 */
+      --card:#ffffff;        /* 메인 카드 */
+      --muted:#9a8775;       /* 보조 텍스트 */
+      --coffee-dark:#8a5533; /* 메인 버튼 / 제목 */
+      --coffee-mid:#c88a54;  /* 선택 강조 색 */
       --tap:44px;
       --radius:14px;
-      --shadow:0 6px 20px rgba(0,0,0,0.05);
+      --shadow:0 6px 20px rgba(104,68,40,0.09);
 
-      --ink:#2e1e0f;
-      --card-bg:#fffdf7;
-      --line:rgba(0,0,0,0.12);
-      --accent:#c59663;
+      --ink:#5b3923;         /* 결과 카드 텍스트 */
+      --card-bg:#fffaf1;     /* 결과 카드 배경 */
+      --line:rgba(0,0,0,0.09);
+      --accent:#b8743b;      /* 포인트 색 */
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -63,7 +63,7 @@
       height:64px;
       border-radius:12px;
       object-fit:cover;
-      box-shadow:0 4px 14px rgba(0,0,0,0.06);
+      box-shadow:0 4px 14px rgba(0,0,0,0.05);
     }
     h1{font-size:22px}
     p.lead{margin-top:4px;color:var(--muted);font-size:14px}
@@ -73,16 +73,11 @@
       border:none;
       color:white;
       padding:12px 16px;
-      border-radius:999px;
+      border-radius:12px;
       cursor:pointer;
       font-weight:800;
       font-size:14px;
-      box-shadow:0 6px 14px rgba(0,0,0,0.12);
-      transition:transform .08s ease, box-shadow .08s ease, background-color .12s ease, color .12s ease;
-    }
-    button:active{
-      transform:translateY(1px);
-      box-shadow:0 3px 8px rgba(0,0,0,0.18);
+      box-shadow:0 6px 14px rgba(104,68,40,0.22);
     }
 
     /* ===== 화면 전환용 ===== */
@@ -93,7 +88,7 @@
     .menu-card{
       margin-top:18px;
       background:var(--card);
-      border-radius:16px;
+      border-radius:12px;
       padding:18px 16px 20px;
       box-shadow:var(--shadow);
       text-align:center;
@@ -102,6 +97,7 @@
       font-size:18px;
       font-weight:800;
       margin-bottom:6px;
+      color:var(--coffee-dark);
     }
     .menu-sub{
       font-size:13px;
@@ -116,17 +112,14 @@
     }
     .menu-btn-main{
       background:var(--coffee-dark);
-      color:#fff;
     }
     .menu-btn-sub{
-      background:var(--coffee-mid);
-      color:var(--ink);
-      box-shadow:0 8px 16px rgba(0,0,0,0.06);
+      background:var(--accent);
     }
     .menu-btn-ghost{
-      background:var(--card-bg);
+      background:transparent;
       color:var(--coffee-dark);
-      border:1px solid var(--line);
+      border:1px solid rgba(0,0,0,0.12);
       box-shadow:none;
     }
 
@@ -139,7 +132,12 @@
       box-shadow:var(--shadow);
     }
     .question{margin-bottom:18px}
-    .q-title{font-weight:800;font-size:15px;margin-bottom:8px}
+    .q-title{
+      font-weight:800;
+      font-size:15px;
+      margin-bottom:8px;
+      color:var(--coffee-dark);
+    }
 
     .likert-row{
       display:flex;
@@ -170,12 +168,12 @@
       width:var(--tap);
       height:var(--tap);
       border-radius:50%;
-      border:3px solid rgba(122,79,50,0.25);
+      border:2px solid rgba(154,135,117,0.5);
       display:flex;
       align-items:center;
       justify-content:center;
       transition:all .18s;
-      background:#fff;
+      background:#fffdf9;
     }
     .likert small{
       font-size:12px;
@@ -186,9 +184,9 @@
     .likert input:checked + .dot{
       background:var(--coffee-mid);
       border-color:var(--coffee-mid);
-      box-shadow:0 6px 18px rgba(0,0,0,0.08);
+      box-shadow:0 6px 18px rgba(0,0,0,0.1);
     }
-    .likert input:checked + .dot small{color:#fff}
+    .likert input:checked + .dot small{color:#fffdf7}
 
     .actions{text-align:right;margin-top:8px}
     .status{margin-top:6px;font-size:13px;color:var(--muted)}
@@ -236,6 +234,7 @@
     .report-head-text{
       font-size:10px;
       letter-spacing:.02em;
+      text-transform:none;
       color:rgba(0,0,0,0.55);
     }
     .report-head-title{
@@ -253,6 +252,7 @@
     .main-box h1{
       font-size:18px;
       margin-bottom:4px;
+      color:var(--coffee-dark);
     }
     .subject{
       font-size:12px;
@@ -274,7 +274,7 @@
       padding:10px 12px;
       border-radius:10px;
       border:1px dashed var(--accent);
-      background:rgba(255,250,240,0.9);
+      background:rgba(255,248,238,0.96);
       text-align:center;
       flex-shrink:0;
     }
@@ -306,7 +306,7 @@
       padding:8px 10px;
       border-radius:10px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,0.96);
       flex-shrink:0;
     }
     .profile-box h2{
@@ -339,7 +339,7 @@
       padding:8px 9px;
       border-radius:8px;
       border:1px solid var(--line);
-      background:rgba(250,248,244,0.95);
+      background:rgba(250,248,244,0.98);
       flex:1;
       display:flex;
       flex-direction:column;
@@ -359,7 +359,7 @@
       padding:8px 9px;
       border-radius:8px;
       border:1px dashed var(--line);
-      background:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,0.95);
       font-size:11px;
       display:none;
     }
@@ -395,17 +395,16 @@
       border-radius:10px;
       padding:9px 8px;
       white-space:nowrap;
-      box-shadow:0 4px 10px rgba(0,0,0,0.08);
     }
-    #toggleTop3Btn{background:var(--coffee-mid);color:var(--ink);}
+    #toggleTop3Btn{background:var(--accent);}
     #saveImageBtn{background:var(--coffee-dark);}
-    #retryBtn{background:#d9b48a;}
+    #retryBtn{background:#cf9a5f;}
 
     /* 지도 화면 */
     .map-card{
       margin-top:18px;
       background:var(--card);
-      border-radius:16px;
+      border-radius:12px;
       padding:14px 14px 18px;
       box-shadow:var(--shadow);
     }
@@ -413,18 +412,21 @@
       font-size:18px;
       font-weight:800;
       margin-bottom:4px;
+      color:var(--coffee-dark);
     }
     .map-sub{
       font-size:13px;
       color:var(--muted);
       margin-bottom:10px;
     }
+
+    /* 높이는 JS에서 1:1로 강제 – 여기선 width만 지정 */
     #knuMap{
       width:100%;
-      aspect-ratio: 1 / 1;
-      height:auto;
       border-radius:12px;
+      overflow:hidden;
     }
+
     .map-legend{
       margin-top:8px;
       font-size:11px;
@@ -472,20 +474,20 @@
     <!-- ===== 1. 메인 메뉴 화면 ===== -->
     <section id="menuScreen" class="screen active">
       <div class="menu-card">
-        <div class="menu-title">커피형 인간입니다.</div>
+        <div class="menu-title">오늘의 아이스 아메리카노, 골라볼까요?</div>
         <p class="menu-sub">
-          커피형 인간입니다. 테스트로 나만의 커피형을 찾고,<br>
-          함께 경북대 아아지도를 만들어갑니다.
+          취향 테스트로 나만의 커피형을 찾고,<br>
+          경북대 인근 아아 지도로 찐 맛집을 함께 모읍니다.
         </p>
         <div class="menu-buttons">
           <button class="menu-btn-main" onclick="showScreen('test')">
-            내 아아 테스트
+            ☕ 나에게 맞는 아이스 아메리카노 테스트하기
           </button>
           <button class="menu-btn-sub" onclick="window.location.href='https://naver.me/FfBQjw53';">
-            경북대 아아지도 만들기
+            🧊 함께 경북대 아아 지도 만들기
           </button>
           <button class="menu-btn-ghost" onclick="showScreen('map')">
-            경북대 아아지도 미리보기
+            🗺 경북대 아아 지도(개발중) 미리보기
           </button>
         </div>
       </div>
@@ -695,21 +697,30 @@
   </div>
 
   <script>
-    /* ===== 지도 컨테이너를 항상 정사각형으로 ===== */
-    function resizeKnuMapSquare(){
+    /* ===== 지도 박스를 정사각형(1:1)으로 맞추기 ===== */
+    let knuMap = null;
+    let mapInitialized = false;
+
+    function setSquareMap(){
       const el = document.getElementById('knuMap');
       if(!el) return;
-      const width = el.offsetWidth;
-      el.style.height = width + 'px';
-      if(window.knuMap){
-        window.knuMap.invalidateSize();
+
+      const w = el.offsetWidth;
+      if(!w) return;
+
+      el.style.height = w + 'px';
+
+      if (knuMap) {
+        knuMap.invalidateSize();
       }
     }
-    window.addEventListener('resize', resizeKnuMapSquare);
+
+    window.addEventListener('resize', setSquareMap);
 
     /* ===== 화면 전환 ===== */
     function showScreen(name){
       document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+
       if(name === 'menu'){
         document.getElementById('menuScreen').classList.add('active');
         window.scrollTo({top:0,behavior:'smooth'});
@@ -718,11 +729,12 @@
         window.scrollTo({top:0,behavior:'smooth'});
       }else if(name === 'map'){
         document.getElementById('mapScreen').classList.add('active');
-        // 정사각형으로 맞춘 뒤 지도 초기화
-        setTimeout(()=>{
-          resizeKnuMapSquare();
+
+        // 화면에 보이는 다음 프레임에서 크기 맞추고 지도 초기화
+        requestAnimationFrame(()=>{
+          setSquareMap();
           initKnuMap();
-        },0);
+        });
       }
     }
 
@@ -939,9 +951,6 @@
     });
 
     /* ===== 지도 기능 ===== */
-    let knuMap = null;
-    let mapInitialized = false;
-
     function tasteColor(taste){
       switch(taste){
         case '상큼형': return '#f39c12';
@@ -955,15 +964,16 @@
 
     async function initKnuMap(){
       if(mapInitialized){
-        if(knuMap){
-          resizeKnuMapSquare();
-          knuMap.invalidateSize();
-        }
+        // 이미 만들어진 경우엔 크기만 다시 맞추기
+        setSquareMap();
+        if(knuMap) knuMap.invalidateSize();
         return;
       }
 
       await loadCafeData();
-      resizeKnuMapSquare();
+
+      // 컨테이너가 화면에 보이는 상태에서 높이 먼저 세팅
+      setSquareMap();
 
       knuMap = L.map('knuMap').setView([35.8880, 128.6100], 15);
 
@@ -992,7 +1002,12 @@
       });
 
       mapInitialized = true;
-      setTimeout(resizeKnuMapSquare, 150);
+
+      // 초기 렌더 후 한 번 더 사이즈 보정
+      setTimeout(()=>{
+        setSquareMap();
+        knuMap.invalidateSize();
+      },100);
     }
 
     /* 다시 검사하기 */
