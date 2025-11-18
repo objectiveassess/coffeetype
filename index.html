@@ -14,21 +14,19 @@
 
   <style>
     :root{
-      /* 토스뱅크 느낌의 전체 톤 */
-      --bg:#f3f4f6;          /* 페이지 전체 배경 (연한 회색) */
-      --card:#ffffff;        /* 카드/박스 배경 */
-      --muted:#6b7280;       /* 보조 텍스트 */
-      --coffee-dark:#111827; /* 메인 텍스트 */
-      --coffee-mid:#2563ff;  /* 포인트 컬러 (파란색) */
+      --bg:#f5efe9;
+      --card:#fff;
+      --muted:#7a6a5a;
+      --coffee-dark:#6b3e26;
+      --coffee-mid:#a67856;
       --tap:44px;
-      --radius:18px;
-      --shadow:0 0 0 rgba(0,0,0,0);
+      --radius:14px;
+      --shadow:0 6px 20px rgba(107,62,38,0.06);
 
-      /* 결과 카드용 공통 변수 */
-      --ink:#111827;
-      --card-bg:#ffffff;
-      --line:#e5e7eb;
-      --accent:#2563ff;
+      --ink:#4a2c1a;
+      --card-bg:#fffdf7;
+      --line:rgba(0,0,0,0.12);
+      --accent:#a67856;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -45,48 +43,40 @@
     }
 
     .wrap{
-      max-width:480px;
+      max-width:880px;
       margin:0 auto;
-      padding:24px 20px 32px;
-      background:#ffffff;
-      border-radius:24px;
-      border:1px solid #e5e7eb;
+      padding:24px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.6),rgba(255,255,255,0.85));
+      border-radius:var(--radius);
     }
 
     /* 공통 헤더 */
     header{
       display:flex;
       align-items:center;
-      gap:12px;
+      gap:14px;
       margin-bottom:10px;
     }
     header img{
-      width:44px;
-      height:44px;
-      border-radius:14px;
+      width:64px;
+      height:64px;
+      border-radius:12px;
       object-fit:cover;
+      box-shadow:0 4px 14px rgba(0,0,0,0.06);
     }
-    h1{
-      font-size:18px;
-      font-weight:800;
-      color:var(--coffee-dark);
-    }
-    p.lead{
-      margin-top:2px;
-      color:var(--muted);
-      font-size:13px;
-    }
+    h1{font-size:22px}
+    p.lead{margin-top:4px;color:var(--muted);font-size:14px}
 
     button{
-      background:var(--coffee-mid);
+      background:var(--coffee-dark);
       border:none;
       color:white;
-      padding:13px 16px;
-      border-radius:999px;
+      padding:12px 16px;
+      border-radius:12px;
       cursor:pointer;
-      font-weight:700;
+      font-weight:800;
       font-size:14px;
-      width:100%;
+      box-shadow:0 6px 14px rgba(107,62,38,0.18);
     }
 
     /* ===== 화면 전환용 ===== */
@@ -95,24 +85,22 @@
 
     /* 메인 메뉴 */
     .menu-card{
-      margin-top:24px;
+      margin-top:18px;
       background:var(--card);
-      border-radius:20px;
-      padding:20px 16px 18px;
-      border:1px solid #e5e7eb;
-      text-align:left;
+      border-radius:12px;
+      padding:18px 16px 20px;
+      box-shadow:var(--shadow);
+      text-align:center;
     }
     .menu-title{
-      font-size:20px;
+      font-size:18px;
       font-weight:800;
-      margin-bottom:8px;
-      color:var(--coffee-dark);
+      margin-bottom:6px;
     }
     .menu-sub{
       font-size:13px;
       color:var(--muted);
-      margin-bottom:18px;
-      line-height:1.6;
+      margin-bottom:16px;
     }
     .menu-buttons{
       display:flex;
@@ -121,18 +109,16 @@
       margin-top:6px;
     }
     .menu-btn-main{
-      background:var(--coffee-mid);
-      color:#ffffff;
+      background:var(--coffee-dark);
     }
     .menu-btn-sub{
-      background:#111827;
-      color:#ffffff;
+      background:#8a5b3a;
     }
     .menu-btn-ghost{
-      background:#f9fafb;
-      color:#111827;
-      border:1px solid #e5e7eb;
-      border-radius:999px;
+      background:transparent;
+      color:var(--coffee-dark);
+      border:1px solid rgba(0,0,0,0.12);
+      box-shadow:none;
     }
 
     /* 설문 카드 */
@@ -142,7 +128,6 @@
       border-radius:12px;
       margin-top:16px;
       box-shadow:var(--shadow);
-      border:1px solid #e5e7eb;
     }
     .question{margin-bottom:18px}
     .q-title{font-weight:800;font-size:15px;margin-bottom:8px}
@@ -176,7 +161,7 @@
       width:var(--tap);
       height:var(--tap);
       border-radius:50%;
-      border:3px solid rgba(15,23,42,0.15);
+      border:3px solid rgba(107,62,38,0.25);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -192,6 +177,7 @@
     .likert input:checked + .dot{
       background:var(--coffee-mid);
       border-color:var(--coffee-mid);
+      box-shadow:0 6px 18px rgba(0,0,0,0.08);
     }
     .likert input:checked + .dot small{color:#fff}
 
@@ -218,7 +204,7 @@
       background:var(--card-bg);
       border-radius:16px;
       border:1px solid var(--line);
-      box-shadow:0 10px 30px rgba(0,0,0,0.06);
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);
       padding:16px 16px 22px;
       display:flex;
       flex-direction:column;
@@ -280,7 +266,7 @@
       padding:10px 12px;
       border-radius:10px;
       border:1px dashed var(--accent);
-      background:rgba(249,250,251,0.9);
+      background:rgba(255,250,240,0.9);
       text-align:center;
       flex-shrink:0;
     }
@@ -345,7 +331,7 @@
       padding:8px 9px;
       border-radius:8px;
       border:1px solid var(--line);
-      background:rgba(249,250,251,0.95);
+      background:rgba(250,248,244,0.95);
       flex:1;
       display:flex;
       flex-direction:column;
@@ -398,21 +384,21 @@
     .result-actions button{
       width:100%;
       font-size:12px;
-      border-radius:999px;
+      border-radius:10px;
       padding:9px 8px;
       white-space:nowrap;
     }
-    #toggleTop3Btn{background:#111827;}
-    #saveImageBtn{background:#2563ff;}
-    #retryBtn{background:#6b7280;}
+    #toggleTop3Btn{background:#8a5b3a;}
+    #saveImageBtn{background:#6b3e26;}
+    #retryBtn{background:#a67856;}
 
     /* 지도 화면 */
     .map-card{
       margin-top:18px;
       background:var(--card);
-      border-radius:20px;
-      padding:16px 16px 18px;
-      border:1px solid #e5e7eb;
+      border-radius:12px;
+      padding:14px 14px 18px;
+      box-shadow:var(--shadow);
     }
     .map-title{
       font-size:18px;
@@ -454,14 +440,6 @@
       .likert-option{gap:3px;}
       .result-card{padding:12px 12px 18px;}
       .main-box h1{font-size:17px;}
-      .wrap{
-        padding:20px 14px 28px;
-        border-radius:0;
-        border:none;
-      }
-      .menu-card{
-        padding:18px 14px 16px;
-      }
     }
 
     @media (max-width:560px){
@@ -485,21 +463,20 @@
     <!-- ===== 1. 메인 메뉴 화면 ===== -->
     <section id="menuScreen" class="screen active">
       <div class="menu-card">
-        <div class="menu-title">오늘 마실 아이스 아메리카노를 골라볼까요</div>
+        <div class="menu-title">오늘의 아이스 아메리카노, 골라볼까요?</div>
         <p class="menu-sub">
-          몇 가지 취향만 선택하면<br>
-          지금 나에게 잘 맞는 아이스 아메리카노와<br>
-          경북대 인근 카페를 함께 추천해 드립니다.
+          취향 테스트로 나만의 커피형을 찾고,<br>
+          경북대 인근 아아 지도로 찐 맛집을 함께 모읍니다.
         </p>
         <div class="menu-buttons">
           <button class="menu-btn-main" onclick="showScreen('test')">
-            나에게 맞는 아이스 아메리카노 테스트하기
+            ☕ 나에게 맞는 아이스 아메리카노 테스트하기
           </button>
           <button class="menu-btn-sub" onclick="window.location.href='https://naver.me/FfBQjw53';">
-            경북대 아아 맛 데이터 제보하기
+            🧊 함께 경북대 아아 지도 만들기
           </button>
           <button class="menu-btn-ghost" onclick="showScreen('map')">
-            경북대 아이스 아메리카노 지도 미리보기
+            🗺 경북대 아아 지도(개발중) 미리보기
           </button>
         </div>
       </div>
@@ -670,10 +647,10 @@
 
       <!-- 결과 하단 버튼들 -->
       <div class="result-actions" id="resultActions">
-        <button id="toggleTop3Btn">비슷한 커피 TOP3 보기</button>
-        <button id="saveImageBtn">결과 이미지 저장하기</button>
-        <button id="retryBtn" onclick="retry()">다시 검사하기</button>
-        <button class="menu-btn-ghost" onclick="showScreen('menu')">메뉴로 돌아가기</button>
+        <button id="toggleTop3Btn">☕ 비슷한 커피 TOP3 보기</button>
+        <button id="saveImageBtn">📱 결과 이미지 저장하기</button>
+        <button id="retryBtn" onclick="retry()">🔄 다시 검사하기</button>
+        <button class="menu-btn-ghost" onclick="showScreen('menu')">← 메뉴로 돌아가기</button>
       </div>
     </section>
 
@@ -701,7 +678,7 @@
           </div>
         </div>
         <div style="margin-top:10px;text-align:right;">
-          <button class="menu-btn-ghost" onclick="showScreen('menu')">메뉴로 돌아가기</button>
+          <button class="menu-btn-ghost" onclick="showScreen('menu')">← 메뉴로 돌아가기</button>
         </div>
       </div>
     </section>
@@ -727,8 +704,7 @@
 
     /* ===== 데이터 로딩 ===== */
     const JSON_URL = './coffee-data.json?v=10';
-    /* 깃허브 raw 에 있는 카페 데이터로 고정 */
-    const CAFE_JSON_URL = 'https://raw.githubusercontent.com/objectiveassess/coffeetype/main/knu-cafes.json';
+    const CAFE_JSON_URL = './knu-cafes.json?v=1';
 
     let coffeeList = [];
     let knuCafes = [];
@@ -752,7 +728,6 @@
       if(knuCafes.length) return;
       try{
         const res = await fetch(CAFE_JSON_URL,{cache:'no-store'});
-        if(!res.ok) throw new Error('HTTP ' + res.status);
         knuCafes = await res.json();
       }catch(e){
         console.error(e);
@@ -859,7 +834,7 @@
       document.getElementById("resultWrap").style.display = "flex";
       document.getElementById("resultActions").style.display = "flex";
       document.getElementById("top3Box").style.display = "none";
-      document.getElementById("toggleTop3Btn").textContent = "비슷한 커피 TOP3 보기";
+      document.getElementById("toggleTop3Btn").textContent = "☕ 비슷한 커피 TOP3 보기";
 
       document.getElementById("resultWrap").scrollIntoView({behavior:"smooth"});
     }
@@ -900,10 +875,10 @@
     toggleBtn.addEventListener("click", ()=>{
       if(top3Box.style.display === "none" || top3Box.style.display === ""){
         top3Box.style.display = "block";
-        toggleBtn.textContent = "비슷한 커피 TOP3 숨기기";
+        toggleBtn.textContent = "☕ 비슷한 커피 TOP3 숨기기";
       }else{
         top3Box.style.display = "none";
-        toggleBtn.textContent = "비슷한 커피 TOP3 보기";
+        toggleBtn.textContent = "☕ 비슷한 커피 TOP3 보기";
       }
     });
 
@@ -917,7 +892,7 @@
       html2canvas(target, {
         scale: 3,
         useCORS: true,
-        backgroundColor: '#f3f4f6',
+        backgroundColor: '#f5efe9',
         scrollY: -window.scrollY
       }).then(canvas=>{
         window.scrollTo(0, prevScrollY);
@@ -958,10 +933,6 @@
       if(mapInitialized) return;
 
       await loadCafeData();
-
-      if(!knuCafes.length){
-        return;
-      }
 
       knuMap = L.map('knuMap').setView([35.8880, 128.6100], 15);
 
