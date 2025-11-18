@@ -237,7 +237,7 @@
       } catch (e) {
         console.error('카페 JSON 로딩/파싱 에러:', e);
         alert('카페 지도 데이터를 불러오지 못했습니다.\n상세: ' + e.message);
-        throw e; // 위 IIFE의 catch에서도 잡을 수 있게
+        return []; //
       }
     }
 
@@ -302,7 +302,7 @@
         initMap(cafes);
       }catch(e){
         console.error(e);
-        // 위에서 이미 alert 했으니 여기선 콘솔만
+        alert('카페 지도 데이터를 불러오지 못했습니다.')
       }
     })();
   </script>
