@@ -91,12 +91,12 @@
     #map{
       width:100%;
       height:0;
-      padding-bottom:70%;       /* 비율 고정 (가로세로) */
+      padding-bottom:70%;       /* 비율 고정 */
       border-radius:12px;
       overflow:hidden;
     }
 
-    /* Leaflet 기본 보정 (둥근 모서리 안 벗어나게) */
+    /* Leaflet 기본 보정 */
     .leaflet-container{
       width:100%;
       height:100%;
@@ -207,38 +207,42 @@
 
     // 타입별 색 & 라벨
     const TYPE_STYLE = {
-      sour:   { color:'var(--type-sour)',  label:'상큼형' },
-      nutty:  { color:'var(--type-nutty)', label:'고소형' },
-      bitter: { color:'var(--type-bitter)',label:'쌉사름형' },
-      sourgoso:{color:'var(--type-blend)', label:'복합 상큼고소형' },
-      blend:  { color:'var(--type-blend)', label:'복합 블렌드형' }
+      sour:    { color:'var(--type-sour)',  label:'상큼형' },
+      nutty:   { color:'var(--type-nutty)', label:'고소형' },
+      bitter:  { color:'var(--type-bitter)',label:'쌉사름형' },
+      sourgoso:{ color:'var(--type-blend)', label:'복합 상큼고소형' },
+      blend:   { color:'var(--type-blend)', label:'복합 블렌드형' }
     };
 
     async function loadCafeData(){
-      if(knuCafes.length) return;
+      // 이미 로딩된 경우 재사용
+      if(knuCafes.length) return knuCafes;
+
       try{
         const res = await fetch(CAFE_JSON_URL, { cache: 'no-store' });
 
-        // 1) HTTP 상태 확인 (404, 500 등)
+        // 1) HTTP 상태 확인
         if (!res.ok) {
           throw new Error('HTTP 상태 코드: ' + res.status);
         }
 
-        // 2) 텍스트로 먼저 받아서
+        // 2) 텍스트로 먼저 받아서 콘솔에 찍고
         const raw = await res.text();
         console.log('knu-cafes.json 원본 텍스트:', raw);
 
-        // 3) 직접 JSON.parse 실행 (여기서 문법 오류면 에러 메시지 확실하게 보임)
+        // 3) 직접 JSON 파싱
         knuCafes = JSON.parse(raw);
+        return knuCafes;
 
       } catch (e) {
         console.error('카페 JSON 로딩/파싱 에러:', e);
-        alert('카페 지도 데이터를 불러오지 못했습니다.\n(개발자 도구 콘솔 오류 메시지를 확인해 주세요)');
+        alert('카페 지도 데이터를 불러오지 못했습니다.\n상세: ' + e.message);
+        throw e; // 위 IIFE의 catch에서도 잡을 수 있게
       }
     }
 
     function initMap(cafes){
-      // 경북대 중심 근처 (필요하면 좌표 살짝 조정 가능)
+      // 경북대 중심 근처
       const center = [35.8883, 128.6108];
 
       const map = L.map('map',{
@@ -247,7 +251,7 @@
         zoomControl:true
       });
 
-      // 더 깔끔한 Carto 밝은 지도 타일
+      // Carto 밝은 지도 타일
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
         attribution:
@@ -261,7 +265,8 @@
         const lng = cafe.lng || cafe.longitude;
         if(typeof lat !== 'number' || typeof lng !== 'number') return;
 
-        const typeKey = cafe.type || 'blend';
+        // taste 또는 type 키 중 하나 사용 (둘 중 뭐 쓰든 맞춰주기)
+        const typeKey = cafe.type || cafe.tasteKey || 'blend';
         const style = TYPE_STYLE[typeKey] || TYPE_STYLE.blend;
 
         const marker = L.circleMarker([lat,lng],{
@@ -272,7 +277,10 @@
           weight:1.5
         }).addTo(map);
 
-        const priceText = cafe.price ? `${cafe.price.toLocaleString()}원` : '정보 수집 중';
+        const priceText = (typeof cafe.price === 'number')
+          ? `${cafe.price.toLocaleString()}원`
+          : (cafe.price || '정보 수집 중');
+
         const typeText  = style.label;
         const noteText  = cafe.note || cafe.desc || '';
 
@@ -294,7 +302,7 @@
         initMap(cafes);
       }catch(e){
         console.error(e);
-        alert('카페 지도 데이터를 불러오지 못했습니다.');
+        // 위에서 이미 alert 했으니 여기선 콘솔만
       }
     })();
   </script>
